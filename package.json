@@ -1,0 +1,31 @@
+{
+  "name": "reason-graphql-hooks",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "example": "parcel example/index.html --out-dir example/dist"
+  },
+  "keywords": [
+    "reason",
+    "reasonml",
+    "ocaml",
+    "graphql"
+  ],
+  "author": "Raincal <cyj94228@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "graphql-hooks": "^3.6.0",
+    "graphql-hooks-memcache": "^1.2.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "reason-react": ">=0.7.0"
+  },
+  "devDependencies": {
+    "bs-platform": "^5.0.4",
+    "bsb-js": "^1.1.7",
+    "graphql_ppx": "^0.2.8",
+    "parcel": "^1.12.3"
+  }
+}
