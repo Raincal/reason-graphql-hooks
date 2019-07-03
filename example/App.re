@@ -1,5 +1,4 @@
-let s = React.string;
-let ate = React.array;
+open Util;
 
 module AllPostsQueryConfig = [%graphql
   {|
@@ -24,11 +23,25 @@ module AllPostsQuery = GraphqlHooks.CreateQuery(AllPostsQueryConfig);
 let make = () => {
   let (skip, setSkip) = React.useState(_ => 0);
 
-  let (simple, _full, _refetch) =
+  let variables = AllPostsQueryConfig.make(~skip, ~first=10, ())##variables;
+
+  let (simple, _, refetch) =
     AllPostsQuery.use(
-      ~variables=AllPostsQueryConfig.make(~skip, ~first=10, ())##variables,
+      ~variables,
+      ~updateData=(prevResult, result) => [%js.deep
+          result["allPosts"].replace(
+            Belt.Array.concat(prevResult##allPosts, result##allPosts),
+          )
+        ],
       (),
     );
+
+  let handleUpdate = first =>
+    refetch(
+      ~variables=AllPostsQueryConfig.make(~skip=0, ~first, ())##variables,
+      (),
+    )
+    |> ignore;
 
   <>
     {switch (simple) {
@@ -39,17 +52,35 @@ let make = () => {
          Array.length(data##allPosts) < data##_allPostsMeta##count;
 
        <>
+         <Submit
+           onSubmission={() => handleUpdate(Array.length(data##allPosts))}
+         />
          <section>
            <ul>
              {data##allPosts
-              |> Js.Array.mapi((post, index) =>
-                   <li key={post##id}>
+              |> Js.Array.mapi((post, index) => {
+                   let votes =
+                     switch (post##votes) {
+                     | Some(votes) => votes
+                     | None => 0
+                     };
+
+                   <li key=post##id>
                      <div>
-                       <span> {{(index + 1)->string_of_int ++ "."}->s} </span>
-                       <a href={post##url}> {post##title->s} </a>
+                       <span>
+                         {((index + 1)->string_of_int ++ ".")->s}
+                       </span>
+                       <a href=post##url> {post##title->s} </a>
+                       <PostUpvoter
+                         id=post##id
+                         votes
+                         onUpdate={() =>
+                           handleUpdate(Array.length(data##allPosts))
+                         }
+                       />
                      </div>
-                   </li>
-                 )
+                   </li>;
+                 })
               |> ate}
            </ul>
            {areMorePosts

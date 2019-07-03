@@ -27,6 +27,7 @@
     "bs-platform": "^5.0.4",
     "bsb-js": "^1.1.7",
     "graphql_ppx": "^0.2.8",
+    "js_deep_ppx": "^1.0.0-alpha.2",
     "parcel": "^1.12.3"
   }
 }

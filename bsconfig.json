@@ -10,7 +10,8 @@
     "bs-fetch"
   ],
   "ppx-flags": [
-    "graphql_ppx/ppx"
+    "graphql_ppx/ppx",
+    "js_deep_ppx/ppx"
   ],
   "sources": [
     "src",
