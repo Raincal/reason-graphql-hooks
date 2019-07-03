@@ -1,12 +1,10 @@
 open GraphqlHooksTypes;
 
-/* Result that is return by the hook */
 type result('a) =
   | Data('a)
   | Error(error)
   | NoData;
 
-/* Result that is return by the hook */
 type controlledResult('a) = {
   data: option('a),
   loading: bool,
@@ -24,7 +22,7 @@ type controledVariantResult('a) =
 
 module Make = (Config: Config) => {
   [@bs.deriving abstract]
-  type options = {
+  type useMutationOptions = {
     [@bs.optional]
     variables: Js.Json.t,
     [@bs.optional]
@@ -33,7 +31,7 @@ module Make = (Config: Config) => {
     fetchOptionsOverrides: Fetch.requestInit,
   };
 
-  type jsResult = {
+  type useMutationResponseJs = {
     .
     "data": Js.Nullable.t(Js.Json.t),
     "loading": bool,
@@ -43,43 +41,39 @@ module Make = (Config: Config) => {
     "httpError": Js.Nullable.t(httpError),
   };
 
-  type jsMutate = (. options) => Js.Promise.t(jsResult);
+  type executeMutation =
+    (. useMutationOptions) => Js.Promise.t(useMutationResponseJs);
 
   [@bs.module "graphql-hooks"]
-  external useMutation: (string, options) => (jsMutate, jsResult) = "";
+  external useMutation:
+    (string, useMutationOptions) => (executeMutation, useMutationResponseJs) =
+    "";
 
   let use = (~variables=?, ~operationName=?, ()) => {
-    let (jsMutate, jsResult) =
-      useMutation(Config.query, options(~variables?, ~operationName?, ()));
+    let (executeMutation, useMutationResponseJs) =
+      useMutation(
+        Config.query,
+        useMutationOptions(~variables?, ~operationName?, ()),
+      );
 
     let mutate =
       React.useMemo1(
         ((), ~variables=?, ()) =>
-          jsMutate(. options(~variables?, ()))
-          |> Js.Promise.then_(jsResult =>
-               (
-                 switch (
-                   Js.Nullable.toOption(jsResult##data),
-                   jsResult##error,
-                 ) {
-                 | (Some(data), _) => Data(Config.parse(data))
-                 //  | (None, true) => Error()
-                 | (None, _) => NoData
-                 }
-               )
-               |> Js.Promise.resolve
-             ),
+          executeMutation(. useMutationOptions(~variables?, ())),
         [|variables|],
       );
 
     let full = {
       data:
-        jsResult##data->Js.Nullable.toOption->Belt.Option.map(Config.parse),
-      loading: jsResult##loading,
-      error: jsResult##error,
-      graphQLErrors: jsResult##graphQLErrors->Js.Nullable.toOption,
-      httpError: jsResult##httpError->Js.Nullable.toOption,
-      fetchError: jsResult##fetchError->Js.Nullable.toOption,
+        useMutationResponseJs##data
+        ->Js.Nullable.toOption
+        ->Belt.Option.map(Config.parse),
+      loading: useMutationResponseJs##loading,
+      error: useMutationResponseJs##error,
+      graphQLErrors:
+        useMutationResponseJs##graphQLErrors->Js.Nullable.toOption,
+      httpError: useMutationResponseJs##httpError->Js.Nullable.toOption,
+      fetchError: useMutationResponseJs##fetchError->Js.Nullable.toOption,
     };
 
     let simple =

@@ -18,7 +18,7 @@ type result('a) = {
 
 module Make = (Config: Config) => {
   [@bs.deriving abstract]
-  type options = {
+  type useQueryOptions = {
     [@bs.optional]
     useCache: bool,
     [@bs.optional]
@@ -37,7 +37,7 @@ module Make = (Config: Config) => {
     updateData: (Config.t, Config.t) => Config.t,
   };
 
-  type jsResult = {
+  type useQueryResponseJs = {
     .
     "loading": bool,
     "cacheHit": bool,
@@ -46,11 +46,12 @@ module Make = (Config: Config) => {
     "graphQLErrors": Js.Nullable.t(graphqlErrors),
     "fetchError": Js.Nullable.t(fetchError),
     "httpError": Js.Nullable.t(httpError),
-    [@bs.meth] "refetch": options => Js.Promise.t(jsResult),
+    [@bs.meth] "refetch": useQueryOptions => Js.Promise.t(useQueryResponseJs),
   };
 
   [@bs.module "graphql-hooks"]
-  external useQuery: (string, options) => jsResult = "";
+  external useQueryJs: (string, useQueryOptions) => useQueryResponseJs =
+    "useQuery";
 
   let use =
       (
@@ -64,9 +65,9 @@ module Make = (Config: Config) => {
         (),
       ) => {
     let jsResult =
-      useQuery(
+      useQueryJs(
         Config.query,
-        options(
+        useQueryOptions(
           ~useCache?,
           ~isManual?,
           ~variables?,
@@ -80,14 +81,7 @@ module Make = (Config: Config) => {
 
     let result = {
       data:
-        jsResult##data
-        ->Js.Nullable.toOption
-        ->Belt.Option.flatMap(data =>
-            switch (Config.parse(data)) {
-            | parsedData => Some(parsedData)
-            | exception _ => None
-            }
-          ),
+        jsResult##data->Js.Nullable.toOption->Belt.Option.map(Config.parse),
       loading: jsResult##loading,
       cacheHit: jsResult##cacheHit,
       error: jsResult##error,
@@ -97,7 +91,7 @@ module Make = (Config: Config) => {
     };
 
     let refetch = (~variables=?, ()) =>
-      jsResult##refetch(options(~variables?, ()));
+      jsResult##refetch(useQueryOptions(~variables?, ()));
 
     (
       switch (result) {
