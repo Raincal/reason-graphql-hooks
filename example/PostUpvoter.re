@@ -12,7 +12,7 @@ module UpdatePostConfig = [%graphql
   |}
 ];
 
-module UpdatePostMutation = GraphqlHooks.CreateMutation(UpdatePostConfig);
+module UpdatePostMutation = GraphqlHooksMutation.Make(UpdatePostConfig);
 
 [@react.component]
 let make = (~id: string, ~votes: int, ~onUpdate: unit => unit) => {

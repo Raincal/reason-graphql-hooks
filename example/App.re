@@ -17,7 +17,7 @@ module AllPostsQueryConfig = [%graphql
   |}
 ];
 
-module AllPostsQuery = GraphqlHooks.CreateQuery(AllPostsQueryConfig);
+module AllPostsQuery = GraphqlHooksQuery.Make(AllPostsQueryConfig);
 
 [@react.component]
 let make = () => {

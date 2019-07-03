@@ -14,7 +14,7 @@ module CreatePostConfig = [%graphql
   |}
 ];
 
-module CreatePostMutation = GraphqlHooks.CreateMutation(CreatePostConfig);
+module CreatePostMutation = GraphqlHooksMutation.Make(CreatePostConfig);
 
 [@react.component]
 let make = (~onSubmission: unit => unit) => {
