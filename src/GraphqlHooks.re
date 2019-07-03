@@ -1,6 +1,11 @@
 open GraphqlHooksTypes;
 
-module Provider = GraphqlProvider;
+module Client = GraphqlHooksClient;
+
+module Memcache = GraphqlHooksMemcache;
+
+module Context = GraphqlHooksContext;
+module Provider = GraphqlHooksContext.Provider;
 
 module CreateQuery = (Config: Config) => Query.Make(Config);
 

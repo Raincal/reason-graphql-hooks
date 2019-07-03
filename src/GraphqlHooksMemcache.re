@@ -1,7 +1,7 @@
 type memCache;
 
 [@bs.deriving abstract]
-type options = {
+type memCacheOptions = {
   [@bs.optional]
   size: int,
   [@bs.optional]
@@ -11,8 +11,9 @@ type options = {
 };
 
 [@bs.module "graphql-hooks-memcache"] [@bs.new]
-external memCache: options => memCache = "default";
+external memCache: memCacheOptions => memCache = "default";
 
-let createMemCache = (~size=?, ~ttl=?, ~initialState=?, ()) => {
-  memCache(options(~size?, ~ttl?, ~initialState?, ()));
+let make = (~size=?, ~ttl=?, ~initialState=?, ()) => {
+  let options = memCacheOptions(~size?, ~ttl?, ~initialState?, ());
+  memCache(options);
 };

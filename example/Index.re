@@ -1,13 +1,15 @@
-let memCache = GraphqlHooksMemcache.createMemCache();
+open GraphqlHooks;
+
+let memCache = Memcache.make();
 
 let client =
-  GraphqlClient.createGraphQLClient(
+  Client.make(
     ~url="https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn",
     ~cache=memCache,
     (),
   );
 
 ReactDOMRe.renderToElementWithId(
-  <GraphqlHooks.Provider client> <App /> </GraphqlHooks.Provider>,
+  <Provider client> <App /> </Provider>,
   "app",
 );
