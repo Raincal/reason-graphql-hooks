@@ -29,6 +29,8 @@ module Make = (Config: Config) => {
     variables: Js.Json.t,
     [@bs.optional]
     operationName: string,
+    [@bs.optional]
+    fetchOptionsOverrides: Fetch.requestInit,
   };
 
   type jsResult = {

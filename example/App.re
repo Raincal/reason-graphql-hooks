@@ -68,9 +68,7 @@ let make = () => {
             )
          |> ate
        | HttpError(error) => <div> {error##body->s} </div>
-       | FetchError(error) =>
-         Js.log(error);
-         <div> "fetch error"->s </div>;
+       | FetchError(_error) => <div> "fetch error"->s </div>
        }
      }}
   </>;

@@ -32,6 +32,8 @@ module Make = (Config: Config) => {
     [@bs.optional]
     ssr: bool,
     [@bs.optional]
+    fetchOptionsOverrides: Fetch.requestInit,
+    [@bs.optional]
     updateData: (Config.t, Config.t) => Config.t,
   };
 

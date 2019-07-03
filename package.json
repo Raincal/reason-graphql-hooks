@@ -16,6 +16,7 @@
   "author": "Raincal <cyj94228@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bs-fetch": "^0.5.0",
     "graphql-hooks": "^3.6.0",
     "graphql-hooks-memcache": "^1.2.1",
     "react": "^16.8.6",
