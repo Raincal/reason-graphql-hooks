@@ -4424,9 +4424,13 @@ readdirp@^2.2.1:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
-"reason-graphql-hooks@link:../..":
-  version "0.0.0"
-  uid ""
+reason-graphql-hooks@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/reason-graphql-hooks/-/reason-graphql-hooks-0.1.1.tgz#bb3dcd1e6310c7aff97308e016dd1276dfd2b2ec"
+  integrity sha512-PLSko+aVYRwPOlOrUofDdpSQe8aTA5mYgVrx7XcCJ+BbrBQ2e56jY+y0FPofX6d84Ik88rZOj7cf1s5l9Zejmg==
+  dependencies:
+    graphql-hooks "^3.6.0"
+    graphql-hooks-memcache "^1.2.1"
 
 reason-react@^0.7.0:
   version "0.7.0"
