@@ -1,4 +1,4 @@
-# Reason-Graphql-Hooks-NextJS
+# Reason-GraphQL-Hooks-NextJS
 
 This is a NextJS based template with following setup:
 

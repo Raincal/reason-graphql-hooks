@@ -12,5 +12,6 @@ yarn-error.log
 .bsb.lock
 .merlin
 lib/
+!components/lib/
 
 *.bs.js
