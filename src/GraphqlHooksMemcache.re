@@ -5,10 +5,8 @@ type options;
 [@bs.deriving abstract]
 type operation = {
   query: string,
-  [@bs.optional]
-  variables: Js.Json.t,
-  [@bs.optional]
-  operationName: string,
+  variables: Js.Nullable.t(Js.Json.t),
+  operationName: Js.Nullable.t(string),
 };
 
 [@bs.deriving abstract]
