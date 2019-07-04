@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "includePaths": [
+    "examples/**"
+  ],
+  "rangeStrategy": "bump"
+}
