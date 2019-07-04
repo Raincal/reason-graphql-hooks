@@ -47,7 +47,7 @@ module Make = (Config: Config) => {
   [@bs.module "graphql-hooks"]
   external useMutation:
     (string, useMutationOptions) => (executeMutation, useMutationResponseJs) =
-    "";
+    "useMutation";
 
   let use = (~variables=?, ~operationName=?, ()) => {
     let (executeMutation, useMutationResponseJs) =
