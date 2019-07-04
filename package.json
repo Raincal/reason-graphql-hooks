@@ -1,10 +1,19 @@
 {
   "name": "reason-graphql-hooks",
+  "description": "Reason bindings for graphql-hooks",
   "version": "0.1.0",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world"
+  },
+  "homepage": "https://github.com/Raincal/reason-graphql-hooks#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raincal/reason-graphql-hooks"
+  },
+  "bugs": {
+    "url": "https://github.com/Raincal/reason-graphql-hooks/issues"
   },
   "keywords": [
     "reason",
