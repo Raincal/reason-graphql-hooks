@@ -23,12 +23,6 @@ module AllPostsQuery = GraphqlHooksQuery.Make(AllPostsQueryConfig);
 let make = () => {
   let (skip, setSkip) = React.useState(_ => 0);
 
-  let client = GraphqlHooksContext.useClient();
-
-  Js.log(client);
-  Js.log(client##cache##keys());
-  Js.log(client##cache##getInitialState());
-
   let variables = AllPostsQueryConfig.make(~skip, ~first=10, ())##variables;
 
   let (simple, _, refetch) =
