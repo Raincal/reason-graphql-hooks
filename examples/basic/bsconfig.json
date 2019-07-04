@@ -1,5 +1,5 @@
 {
-  "name": "reason-graphql-hooks",
+  "name": "basic",
   "namespace": false,
   "reason": {
     "react-jsx": 3
@@ -7,12 +7,13 @@
   "refmt": 3,
   "bs-dependencies": [
     "reason-react",
-    "bs-fetch"
+    "reason-graphql-hooks"
   ],
-  "ppx-flags": [],
-  "sources": [
-    "src"
+  "ppx-flags": [
+    "graphql_ppx/ppx",
+    "js_deep_ppx/ppx"
   ],
+  "sources": "src",
   "package-specs": {
     "module": "es6",
     "in-source": true

@@ -1,0 +1,25 @@
+{
+  "name": "basic",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "example": "parcel public/index.html"
+  },
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "reason-graphql-hooks": "link:../../",
+    "reason-react": "^0.7.0"
+  },
+  "devDependencies": {
+    "bs-platform": "^5.0.6",
+    "bsb-js": "^1.1.7",
+    "graphql_ppx": "^0.2.8",
+    "js_deep_ppx": "^1.0.0-alpha.2",
+    "parcel": "^1.12.3"
+  }
+}

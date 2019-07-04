@@ -2,7 +2,7 @@
 .merlin
 .bsb.lock
 npm-debug.log
-/lib/
+/lib/bs/
 /node_modules/
 /.cache/
 /example/dist/
@@ -10,3 +10,5 @@ npm-debug.log
 yarn-error.log
 .graphql_ppx_cache
 .vscode
+lib/
+dist/

@@ -4,30 +4,30 @@
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
-    "clean": "bsb -clean-world",
-    "example": "parcel example/index.html --out-dir example/dist"
+    "clean": "bsb -clean-world"
   },
   "keywords": [
     "reason",
     "reasonml",
     "ocaml",
-    "graphql"
+    "graphql",
+    "graphql-hooks"
   ],
   "author": "Raincal <cyj94228@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "bs-fetch": "^0.5.0",
     "graphql-hooks": "^3.6.0",
-    "graphql-hooks-memcache": "^1.2.1",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "reason-react": ">=0.7.0"
+    "graphql-hooks-memcache": "^1.2.1"
   },
   "devDependencies": {
+    "bs-fetch": "^0.5.0",
     "bs-platform": "^5.0.4",
-    "bsb-js": "^1.1.7",
-    "graphql_ppx": "^0.2.8",
-    "js_deep_ppx": "^1.0.0-alpha.2",
-    "parcel": "^1.12.3"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "reason-react": "^0.7.0"
+  },
+  "peerDependencies": {
+    "bs-fetch": "^0.5.0",
+    "reason-react": "^0.7.0"
   }
 }
