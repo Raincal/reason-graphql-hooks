@@ -1,0 +1,31 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "./_fonts.css";
+
+body {
+  @apply font-sans bg-white;
+}
+
+.votes--button {
+  @apply text-sm bg-transparent ml-2 relative;
+  border: 1px solid #e4e4e4;
+  padding: 0px 5px 0px 16px;
+}
+.votes--button:active {
+  @apply bg-transparent;
+}
+.votes--button:focus {
+  @apply outline-none;
+}
+.votes--button:before {
+  @apply absolute mr-2 w-0 h-0;
+  left: 5px;
+  top: 50%;
+  transform: translate(0, -50%);
+  border-color: transparent transparent #000000 transparent;
+  border-style: solid;
+  border-width: 0 4px 6px 4px;
+  content: '';
+}

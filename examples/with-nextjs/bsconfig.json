@@ -1,0 +1,50 @@
+{
+  "name": "with-nextjs",
+  "namespace": false,
+  "reason": {
+    "react-jsx": 3
+  },
+  "refmt": 3,
+  "bs-dependencies": [
+    "reason-react",
+    "bs-fetch",
+    "@glennsl/bs-json",
+    "reason-graphql-hooks"
+  ],
+  "ppx-flags": [
+    "graphql_ppx/ppx",
+    "js_deep_ppx/ppx"
+  ],
+  "sources": [
+    {
+      "dir": "common"
+    },
+    {
+      "dir": "bindings"
+    },
+    {
+      "dir": "pages",
+      "subdirs": true
+    },
+    {
+      "dir": "components",
+      "subdirs": true
+    },
+    "layouts"
+  ],
+  "package-specs": {
+    "module": "es6",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bsc-flags": [
+    "-bs-no-version-header",
+    "-bs-super-errors",
+    "-bs-g"
+  ],
+  "gentypeconfig": {
+    "language": "untyped",
+    "shims": [],
+    "module": "es6"
+  }
+}
