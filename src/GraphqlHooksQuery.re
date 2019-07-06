@@ -84,8 +84,8 @@ module Make = (Config: Config) => {
 
       let response =
         switch (result) {
-        | {loading: true} => Loading
         | {data: Some(data)} => Data(data)
+        | {loading: true} => Loading
         | {error: true, graphQLErrors: Some(errors)} =>
           Error(GraphQLErrors(errors))
         | {error: true, httpError: Some(error)} => Error(HttpError(error))

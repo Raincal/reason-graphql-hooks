@@ -26,7 +26,7 @@ let make = () => {
 
   let variables = AllPostsQueryConfig.make(~skip, ~first=10, ())##variables;
 
-  let ({response}, refetch) =
+  let ({response, loading}, refetch) =
     AllPostsQuery.use(
       ~variables,
       ~updateData=
@@ -84,7 +84,10 @@ let make = () => {
            </ul>
            {areMorePosts
               ? <button onClick={_ => setSkip(_ => skip + 10)}>
-                  "Show More"->s
+                  {
+                    loading ? "Loading..." : "Show More";
+                  }
+                  ->s
                 </button>
               : React.null}
          </section>

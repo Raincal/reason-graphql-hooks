@@ -27,7 +27,7 @@ module AllPostsQuery = GraphqlHooksQuery.Make(AllPostsQueryConfig);
 let default = () => {
   let (skip, setSkip) = React.useState(_ => 0);
 
-  let ({response}, refetch) =
+  let ({response, loading}, refetch) =
     AllPostsQuery.use(
       ~variables=AllPostsQueryConfig.make(~skip, ~first=10, ())##variables,
       ~updateData=
@@ -89,7 +89,10 @@ let default = () => {
               ? <button
                   className="bg-blue-400 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline text-sm"
                   onClick={_ => setSkip(_ => skip + 10)}>
-                  "Show More"->s
+                  {
+                    loading ? "Loading..." : "Show More";
+                  }
+                  ->s
                 </button>
               : React.null}
          </section>
