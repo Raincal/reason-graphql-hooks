@@ -5,9 +5,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
-    "@glennsl/bs-json": "^3.0.0",
+    "@glennsl/bs-json": "^4.0.0",
     "@zeit/next-css": "^1.0.1",
-    "bs-fetch": "^0.3.1",
+    "bs-fetch": "^0.5.0",
     "bs-platform": "^5.0.4",
     "gentype": "^2.23.0",
     "graphql-hooks": "^3.6.0",

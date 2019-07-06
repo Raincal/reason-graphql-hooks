@@ -720,10 +720,10 @@
     postcss "^7.0.14"
     purgecss "^1.3.0"
 
-"@glennsl/bs-json@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-3.0.0.tgz#b4e1cf6612270a8dd7287a8a71ebe17e8f0fb683"
-  integrity sha512-slqtGLd/c3yQK9Qfd1gfMB9JCzNU4wzCpVPfO9pXlG64M+te5r30FK++tb3uQEVlVLYtpgZ4wCHtkI8xoshgxQ==
+"@glennsl/bs-json@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-4.0.0.tgz#f057d0d1d84d614e27d8bbb67b64e6b6727f24b2"
+  integrity sha512-nunb6+cZcx7pyooh8i4froogXumOOiFb7rF3bz6E9X7b3Dc+3/HGwpnUjxciFN8eQL4QC+MskzG1tG+Ci1aJxA==
 
 "@sindresorhus/fnv1a@^1.2.0":
   version "1.2.0"
@@ -1427,17 +1427,17 @@ browserslist@^4.0.0, browserslist@^4.1.0, browserslist@^4.6.3:
     electron-to-chromium "^1.3.164"
     node-releases "^1.1.23"
 
-bs-fetch@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.3.1.tgz#9c7d074b27e6bb2b9f2ec985964f32bcac49f79e"
-  integrity sha512-MxwnuuXPldXnoCtlpeN5JNbbmb1tVgsqpLfVunvuMLAIQNyP0TqoImHiQRTz38PBSN8/iX+2yVlm+PFJfnHHiA==
+bs-fetch@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.5.0.tgz#6913b1d1ddfa0b0a4b832357854e9763d61d4b28"
+  integrity sha512-cGjwRpyNcIaX+p2ssy/38zs7BM/miKNgmOR3NEhxKFete5mR05JcvjuV4raG89oGCG281SU1b56TTAKmf9VCug==
 
 bs-platform@^5.0.4:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.0.6.tgz#88c13041fb020479800de3d82c680bf971091425"
   integrity sha512-6Boa2VEcWJp2WJr38L7bp3J929nYha7gDarjxb070jWzgfPJ/WbzjipmSfnu2eqqk1MfjEIpBipbPz6n1NISwA==
 
-"bs-platform@github:bsansouci/bsb-native#3.2.0":
+bs-platform@bsansouci/bsb-native#3.2.0:
   version "3.2.0"
   resolved "https://codeload.github.com/bsansouci/bsb-native/tar.gz/84604c9f6a5611eed68372efdb575c00a3e72813"
   dependencies:
@@ -5154,10 +5154,10 @@ readdirp@^2.2.1:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
-reason-graphql-hooks@^0.1.0:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/reason-graphql-hooks/-/reason-graphql-hooks-0.1.1.tgz#bb3dcd1e6310c7aff97308e016dd1276dfd2b2ec"
-  integrity sha512-PLSko+aVYRwPOlOrUofDdpSQe8aTA5mYgVrx7XcCJ+BbrBQ2e56jY+y0FPofX6d84Ik88rZOj7cf1s5l9Zejmg==
+reason-graphql-hooks@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/reason-graphql-hooks/-/reason-graphql-hooks-0.2.1.tgz#652fc7c50d08e3c00f0d37a42f0c9fe7c89faa97"
+  integrity sha512-/iWu3qf4mB/wujE54e0cP89poCjFohvgV4HZd8frKPuSzSVA37RKN37ryX0Fec62y//gm7TufguUR+IxE72tHw==
   dependencies:
     graphql-hooks "^3.6.0"
     graphql-hooks-memcache "^1.2.1"
