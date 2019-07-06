@@ -7,7 +7,8 @@
   "refmt": 3,
   "bs-dependencies": [
     "reason-react",
-    "reason-graphql-hooks"
+    "reason-graphql-hooks",
+    "bs-fetch"
   ],
   "ppx-flags": [
     "graphql_ppx/ppx",

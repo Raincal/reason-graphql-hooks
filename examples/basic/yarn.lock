@@ -1163,6 +1163,11 @@ browserslist@^4.0.0, browserslist@^4.1.0, browserslist@^4.3.4:
     electron-to-chromium "^1.3.164"
     node-releases "^1.1.23"
 
+bs-fetch@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.5.0.tgz#6913b1d1ddfa0b0a4b832357854e9763d61d4b28"
+  integrity sha512-cGjwRpyNcIaX+p2ssy/38zs7BM/miKNgmOR3NEhxKFete5mR05JcvjuV4raG89oGCG281SU1b56TTAKmf9VCug==
+
 bs-platform@^5.0.6:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.0.6.tgz#88c13041fb020479800de3d82c680bf971091425"
@@ -4424,10 +4429,10 @@ readdirp@^2.2.1:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
-reason-graphql-hooks@^0.1.0:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/reason-graphql-hooks/-/reason-graphql-hooks-0.1.1.tgz#bb3dcd1e6310c7aff97308e016dd1276dfd2b2ec"
-  integrity sha512-PLSko+aVYRwPOlOrUofDdpSQe8aTA5mYgVrx7XcCJ+BbrBQ2e56jY+y0FPofX6d84Ik88rZOj7cf1s5l9Zejmg==
+reason-graphql-hooks@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/reason-graphql-hooks/-/reason-graphql-hooks-0.2.1.tgz#652fc7c50d08e3c00f0d37a42f0c9fe7c89faa97"
+  integrity sha512-/iWu3qf4mB/wujE54e0cP89poCjFohvgV4HZd8frKPuSzSVA37RKN37ryX0Fec62y//gm7TufguUR+IxE72tHw==
   dependencies:
     graphql-hooks "^3.6.0"
     graphql-hooks-memcache "^1.2.1"
