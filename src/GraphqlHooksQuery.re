@@ -1,21 +1,5 @@
 open GraphqlHooksTypes;
 
-type variant('a) =
-  | Data('a)
-  | Error(error)
-  | Loading
-  | NoData;
-
-type result('a) = {
-  data: option('a),
-  loading: bool,
-  cacheHit: bool,
-  error: bool,
-  graphQLErrors: option(graphqlErrors),
-  httpError: option(httpError),
-  fetchError: option(fetchError),
-};
-
 module Make = (Config: Config) => {
   [@bs.deriving abstract]
   type useQueryOptions = {
@@ -37,16 +21,16 @@ module Make = (Config: Config) => {
     updateData: (Config.t, Config.t) => Config.t,
   };
 
+  [@bs.deriving abstract]
   type useQueryResponseJs = {
-    .
-    "loading": bool,
-    "cacheHit": bool,
-    "data": Js.Nullable.t(Js.Json.t),
-    "error": bool,
-    "graphQLErrors": Js.Nullable.t(graphqlErrors),
-    "fetchError": Js.Nullable.t(fetchError),
-    "httpError": Js.Nullable.t(httpError),
-    [@bs.meth] "refetch": useQueryOptions => Js.Promise.t(useQueryResponseJs),
+    loading: bool,
+    cacheHit: bool,
+    data: Js.Nullable.t(Js.Json.t),
+    error: bool,
+    graphQLErrors: Js.Nullable.t(graphqlErrors),
+    fetchError: Js.Nullable.t(fetchError),
+    httpError: Js.Nullable.t(httpError),
+    refetch: useQueryOptions => Js.Promise.t(useQueryResponseJs),
   };
 
   [@bs.module "graphql-hooks"]
@@ -64,47 +48,61 @@ module Make = (Config: Config) => {
         ~updateData=?,
         (),
       ) => {
-    let jsResult =
-      useQueryJs(
-        Config.query,
-        useQueryOptions(
-          ~useCache?,
-          ~isManual?,
-          ~variables?,
-          ~operationName?,
-          ~skipCache?,
-          ~ssr?,
-          ~updateData?,
-          (),
-        ),
+    let options =
+      useQueryOptions(
+        ~useCache?,
+        ~isManual?,
+        ~variables?,
+        ~operationName?,
+        ~skipCache?,
+        ~ssr?,
+        ~updateData?,
+        (),
       );
-
-    let result = {
-      data:
-        jsResult##data->Js.Nullable.toOption->Belt.Option.map(Config.parse),
-      loading: jsResult##loading,
-      cacheHit: jsResult##cacheHit,
-      error: jsResult##error,
-      graphQLErrors: jsResult##graphQLErrors->Js.Nullable.toOption,
-      httpError: jsResult##httpError->Js.Nullable.toOption,
-      fetchError: jsResult##fetchError->Js.Nullable.toOption,
-    };
+    let state = useQueryJs(Config.query, options);
 
     let refetch = (~variables=?, ()) =>
-      jsResult##refetch(useQueryOptions(~variables?, ()));
+      state->refetchGet(useQueryOptions(~variables?, ()));
 
-    (
-      switch (result) {
-      | {loading: true, data: None} => Loading
-      | {data: Some(data)} => Data(data)
-      | {error: true, graphQLErrors: Some(errors)} =>
-        Error(GraphQLErrors(errors))
-      | {error: true, httpError: Some(error)} => Error(HttpError(error))
-      | {error: true, fetchError: Some(error)} => Error(FetchError(error))
-      | _ => NoData
-      },
-      result,
-      refetch,
-    );
+    let useQueryResponseToRecord = (parse, state) => {
+      let data = state->dataGet->Js.Nullable.toOption->Belt.Option.map(parse);
+      let loading = state->loadingGet;
+      let error = state->errorGet;
+      let graphQLErrors = state->graphQLErrorsGet->Js.Nullable.toOption;
+      let httpError = state->httpErrorGet->Js.Nullable.toOption;
+      let fetchError = state->fetchErrorGet->Js.Nullable.toOption;
+      let cacheHit = state->cacheHitGet;
+
+      let result = {
+        data,
+        loading,
+        error,
+        graphQLErrors,
+        httpError,
+        fetchError,
+      };
+
+      let response =
+        switch (result) {
+        | {loading: true} => Loading
+        | {data: Some(data)} => Data(data)
+        | {error: true, graphQLErrors: Some(errors)} =>
+          Error(GraphQLErrors(errors))
+        | {error: true, httpError: Some(error)} => Error(HttpError(error))
+        | {error: true, fetchError: Some(error)} =>
+          Error(FetchError(error))
+        | _ => NoData
+        };
+
+      {loading, data, cacheHit, response};
+    };
+
+    let state_record =
+      React.useMemo2(
+        () => state |> useQueryResponseToRecord(Config.parse),
+        (state, Config.parse),
+      );
+
+    (state_record, refetch);
   };
 };

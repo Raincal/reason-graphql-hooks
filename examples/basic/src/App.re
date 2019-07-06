@@ -1,3 +1,4 @@
+open GraphqlHooks.Types;
 open Util;
 
 module AllPostsQueryConfig = [%graphql
@@ -25,14 +26,14 @@ let make = () => {
 
   let variables = AllPostsQueryConfig.make(~skip, ~first=10, ())##variables;
 
-  let (simple, _, refetch) =
+  let ({response}, refetch) =
     AllPostsQuery.use(
       ~variables,
-      ~updateData=(prevResult, result) => [%js.deep
+      ~updateData=
+        (prevResult, result) => [%js.deep
           result["allPosts"].replace(
             Belt.Array.concat(prevResult##allPosts, result##allPosts),
-          )
-        ],
+          )],
       (),
     );
 
@@ -44,7 +45,7 @@ let make = () => {
     |> ignore;
 
   <>
-    {switch (simple) {
+    {switch (response) {
      | Loading => <div> "Loading"->s </div>
      | NoData => <div> "No Data"->s </div>
      | Data(data) =>
@@ -67,9 +68,7 @@ let make = () => {
 
                    <li key=post##id>
                      <div>
-                       <span>
-                         {((index + 1)->string_of_int ++ ".")->s}
-                       </span>
+                       <span> {((index + 1)->string_of_int ++ ".")->s} </span>
                        <a href=post##url> {post##title->s} </a>
                        <PostUpvoter
                          id=post##id

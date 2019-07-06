@@ -28,3 +28,25 @@ type error =
   | GraphQLErrors(graphqlErrors)
   | HttpError(httpError)
   | FetchError(fetchError);
+
+type response('a) =
+  | Data('a)
+  | Error(error)
+  | Loading
+  | NoData;
+
+type result('a) = {
+  data: option('a),
+  loading: bool,
+  error: bool,
+  graphQLErrors: option(graphqlErrors),
+  httpError: option(httpError),
+  fetchError: option(fetchError),
+};
+
+type useQueryResponse('a) = {
+  loading: bool,
+  data: option('a),
+  cacheHit: bool,
+  response: response('a),
+};

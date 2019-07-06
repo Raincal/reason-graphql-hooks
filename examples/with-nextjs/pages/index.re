@@ -1,6 +1,7 @@
 %raw
 "require('../styles/main.css')";
 
+open GraphqlHooks.Types;
 open Util.ReactStuff;
 
 module AllPostsQueryConfig = [%graphql
@@ -26,7 +27,7 @@ module AllPostsQuery = GraphqlHooksQuery.Make(AllPostsQueryConfig);
 let default = () => {
   let (skip, setSkip) = React.useState(_ => 0);
 
-  let (simple, _, refetch) =
+  let ({response}, refetch) =
     AllPostsQuery.use(
       ~variables=AllPostsQueryConfig.make(~skip, ~first=10, ())##variables,
       ~updateData=
@@ -45,7 +46,7 @@ let default = () => {
     |> ignore;
 
   <MainLayout>
-    {switch (simple) {
+    {switch (response) {
      | Loading => <div> "Loading"->s </div>
      | NoData => <div> "No Data"->s </div>
      | Data(data) =>
