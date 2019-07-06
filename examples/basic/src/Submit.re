@@ -1,3 +1,4 @@
+open GraphqlHooks.Types;
 open Util;
 
 module CreatePostConfig = [%graphql
@@ -23,7 +24,7 @@ let make = (~onSubmission: unit => unit) => {
 
   let variables = CreatePostConfig.make(~title, ~url, ())##variables;
 
-  let (createPost, simple, _) = CreatePostMutation.use(~variables, ());
+  let ({loading}, createPost) = CreatePostMutation.use(~variables, ());
 
   let reset = () => {
     setTitle(_ => "");
@@ -56,11 +57,6 @@ let make = (~onSubmission: unit => unit) => {
       required=true
       onChange={e => e->ReactEvent.Form.target##value->setUrl}
     />
-    <button type_="submit">
-      {switch (simple) {
-       | Loading => "Loading"->s
-       | _ => "Submit"->s
-       }}
-    </button>
+    <button type_="submit"> {loading ? "Loading..." : "Submit"}->s </button>
   </form>;
 };

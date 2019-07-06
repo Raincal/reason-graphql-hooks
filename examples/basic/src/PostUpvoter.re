@@ -25,7 +25,7 @@ let make = (~id: string, ~votes: int, ~onUpdate: unit => unit) => {
       (),
     )##variables;
 
-  let (updatePost, _, _) = UpdatePostMutation.use(~variables, ());
+  let (_, updatePost) = UpdatePostMutation.use(~variables, ());
 
   <button
     onClick={_ =>

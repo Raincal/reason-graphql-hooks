@@ -19,7 +19,7 @@ module UpdatePostMutation = GraphqlHooksMutation.Make(UpdatePostConfig);
 
 [@react.component]
 let make = (~id: string, ~votes: int, ~onUpdate: unit => unit) => {
-  let (updatePost, _, _) =
+  let (_, updatePost) =
     UpdatePostMutation.use(
       ~variables=
         UpdatePostConfig.make(

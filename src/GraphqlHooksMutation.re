@@ -1,25 +1,5 @@
 open GraphqlHooksTypes;
 
-type result('a) =
-  | Data('a)
-  | Error(error)
-  | NoData;
-
-type controlledResult('a) = {
-  data: option('a),
-  loading: bool,
-  error: bool,
-  graphQLErrors: option(graphqlErrors),
-  httpError: option(httpError),
-  fetchError: option(fetchError),
-};
-
-type controledVariantResult('a) =
-  | Data('a)
-  | Error(error)
-  | Loading
-  | NoData;
-
 module Make = (Config: Config) => {
   [@bs.deriving abstract]
   type useMutationOptions = {
@@ -31,18 +11,19 @@ module Make = (Config: Config) => {
     fetchOptionsOverrides: Fetch.requestInit,
   };
 
+  [@bs.deriving abstract]
   type useMutationResponseJs = {
-    .
-    "data": Js.Nullable.t(Js.Json.t),
-    "loading": bool,
-    "error": bool,
-    "graphQLErrors": Js.Nullable.t(graphqlErrors),
-    "fetchError": Js.Nullable.t(fetchError),
-    "httpError": Js.Nullable.t(httpError),
+    loading: bool,
+    cacheHit: bool,
+    data: Js.Nullable.t(Js.Json.t),
+    error: bool,
+    graphQLErrors: Js.Nullable.t(graphqlErrors),
+    fetchError: Js.Nullable.t(fetchError),
+    httpError: Js.Nullable.t(httpError),
   };
 
   type executeMutation =
-    (. useMutationOptions) => Js.Promise.t(useMutationResponseJs);
+    useMutationOptions => Js.Promise.t(useMutationResponseJs);
 
   [@bs.module "graphql-hooks"]
   external useMutation:
@@ -56,37 +37,53 @@ module Make = (Config: Config) => {
         useMutationOptions(~variables?, ~operationName?, ()),
       );
 
-    let mutate =
-      React.useMemo1(
-        ((), ~variables=?, ()) =>
-          executeMutation(. useMutationOptions(~variables?, ())),
+    let useMutationResponseToRecord =
+        (parse: Js.Json.t => 'response, state: useMutationResponseJs) => {
+      let data = state->dataGet->Js.Nullable.toOption->Belt.Option.map(parse);
+      let loading = state->loadingGet;
+      let error = state->errorGet;
+      let graphQLErrors = state->graphQLErrorsGet->Js.Nullable.toOption;
+      let httpError = state->httpErrorGet->Js.Nullable.toOption;
+      let fetchError = state->fetchErrorGet->Js.Nullable.toOption;
+      let cacheHit = state->cacheHitGet;
+
+      let result = {
+        data,
+        loading,
+        error,
+        graphQLErrors,
+        httpError,
+        fetchError,
+      };
+
+      let response =
+        switch (result) {
+        | {loading: true} => Loading
+        | {data: Some(data)} => Data(data)
+        | {error: true, graphQLErrors: Some(errors)} =>
+          Error(GraphQLErrors(errors))
+        | {error: true, httpError: Some(error)} => Error(HttpError(error))
+        | {error: true, fetchError: Some(error)} =>
+          Error(FetchError(error))
+        | _ => NoData
+        };
+
+      {loading, data, cacheHit, response};
+    };
+
+    let useMutationResponse =
+      React.useMemo2(
+        () =>
+          useMutationResponseJs |> useMutationResponseToRecord(Config.parse),
+        (Config.parse, useMutationResponseJs),
+      );
+
+    let executeMutation =
+      React.useCallback1(
+        () => executeMutation(useMutationOptions(~variables?, ())),
         [|variables|],
       );
 
-    let full = {
-      data:
-        useMutationResponseJs##data
-        ->Js.Nullable.toOption
-        ->Belt.Option.map(Config.parse),
-      loading: useMutationResponseJs##loading,
-      error: useMutationResponseJs##error,
-      graphQLErrors:
-        useMutationResponseJs##graphQLErrors->Js.Nullable.toOption,
-      httpError: useMutationResponseJs##httpError->Js.Nullable.toOption,
-      fetchError: useMutationResponseJs##fetchError->Js.Nullable.toOption,
-    };
-
-    let simple =
-      switch (full) {
-      | {loading: true} => Loading
-      | {data: Some(data)} => Data(data)
-      | {error: true, graphQLErrors: Some(errors)} =>
-        Error(GraphQLErrors(errors))
-      | {error: true, httpError: Some(error)} => Error(HttpError(error))
-      | {error: true, fetchError: Some(error)} => Error(FetchError(error))
-      | _ => NoData
-      };
-
-    (mutate, simple, full);
+    (useMutationResponse, executeMutation);
   };
 };

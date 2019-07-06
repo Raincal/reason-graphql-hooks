@@ -44,7 +44,7 @@ type result('a) = {
   fetchError: option(fetchError),
 };
 
-type useQueryResponse('a) = {
+type hooksResponse('a) = {
   loading: bool,
   data: option('a),
   cacheHit: bool,

@@ -1,6 +1,7 @@
 %raw
 "require('../styles/main.css')";
 
+open GraphqlHooks.Types;
 open Util.ReactStuff;
 
 module CreatePostConfig = [%graphql
@@ -24,7 +25,7 @@ let make = (~onSubmission: unit => unit) => {
   let (title, setTitle) = React.useState(_ => "");
   let (url, setUrl) = React.useState(_ => "");
 
-  let (createPost, simple, _) =
+  let ({loading}, createPost) =
     CreatePostMutation.use(
       ~variables=CreatePostConfig.make(~title, ~url, ())##variables,
       (),
@@ -66,10 +67,7 @@ let make = (~onSubmission: unit => unit) => {
     <button
       type_="submit"
       className="bg-blue-400 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline text-sm">
-      {switch (simple) {
-       | Loading => "Loading"->s
-       | _ => "Submit"->s
-       }}
+      {loading ? "Loading..." : "Submit"}->s
     </button>
   </form>;
 };
