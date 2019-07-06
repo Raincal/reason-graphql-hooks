@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "reason-graphql-hooks": "^0.1.0",
+    "reason-graphql-hooks": "^0.2.0",
     "reason-react": "^0.7.0"
   },
   "devDependencies": {
