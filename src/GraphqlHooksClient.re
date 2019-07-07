@@ -1,19 +1,6 @@
-type t = {
-  .
-  "cache": GraphqlHooksMemcache.memCache
-};
+type t = {. "cache": GraphqlHooksMemcache.memCache};
 
 type fetch;
-
-type fetchOptions =
-  | FetchOpts(Fetch.requestInit)
-  | FetchFn(unit => Fetch.requestInit);
-
-let unwrapFetchOptions = fetchOptions =>
-  switch (fetchOptions) {
-  | FetchOpts(opts) => opts
-  | FetchFn(fn) => fn()
-  };
 
 [@bs.deriving abstract]
 type clientOptions = {
@@ -34,6 +21,10 @@ type clientOptions = {
 
 [@bs.module "graphql-hooks"] [@bs.new]
 external client: clientOptions => t = "GraphQLClient";
+
+[@bs.send] external setHeader: (t, string, string) => t = "setHeader";
+[@bs.send] external setHeaders: (t, Fetch.headersInit) => t = "setHeaders";
+[@bs.send] external removeHeader: (t, string) => t = "removeHeader";
 
 let make =
     (
