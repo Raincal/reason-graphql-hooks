@@ -79,8 +79,9 @@ module Make = (Config: Config) => {
       );
 
     let executeMutation =
-      React.useCallback1(
-        () => executeMutation(useMutationOptions(~variables?, ())),
+      React.useMemo1(
+        ((), ~variables=?, ()) =>
+          executeMutation(useMutationOptions(~variables?, ())),
         [|variables|],
       );
 
