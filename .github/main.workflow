@@ -17,6 +17,6 @@ action "Tag" {
 action "Publish" {
   uses = "actions/npm@master"
   needs = ["Tag"]
-  args = "publish --access public"
+  args = "publish --access reason-graphql-hooks/public"
   secrets = ["NPM_AUTH_TOKEN"]
 }

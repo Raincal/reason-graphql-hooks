@@ -1,13 +1,8 @@
+open GraphqlHooksTypes;
+
 type lru;
 type cacheData;
 type options;
-
-[@bs.deriving abstract]
-type operation = {
-  query: string,
-  variables: Js.Nullable.t(Js.Json.t),
-  operationName: Js.Nullable.t(string),
-};
 
 [@bs.deriving abstract]
 type cacheKeyObject = {

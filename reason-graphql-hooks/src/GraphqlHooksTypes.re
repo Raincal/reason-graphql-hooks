@@ -4,6 +4,13 @@ module type Config = {
   let parse: Js.Json.t => t;
 };
 
+[@bs.deriving abstract]
+type operation = {
+  query: string,
+  variables: Js.Nullable.t(Js.Json.t),
+  operationName: Js.Nullable.t(string),
+};
+
 type graphqlError = {
   .
   "message": string,

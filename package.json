@@ -1,40 +1,15 @@
 {
-  "name": "reason-graphql-hooks",
-  "description": "Reason bindings for graphql-hooks",
-  "version": "0.2.2",
-  "scripts": {
-    "build": "bsb -make-world",
-    "start": "bsb -make-world -w",
-    "clean": "bsb -clean-world"
-  },
-  "homepage": "https://github.com/Raincal/reason-graphql-hooks#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Raincal/reason-graphql-hooks"
-  },
-  "bugs": {
-    "url": "https://github.com/Raincal/reason-graphql-hooks/issues"
-  },
-  "keywords": [
-    "reason",
-    "reasonml",
-    "ocaml",
-    "graphql",
-    "graphql-hooks"
-  ],
-  "author": "Raincal <cyj94228@gmail.com>",
+  "name": "reason-graphql-hooks-workspace",
+  "private": true,
+  "version": "0.0.1",
+  "main": "index.js",
   "license": "MIT",
-  "dependencies": {
-    "graphql-hooks": "^3.6.0",
-    "graphql-hooks-memcache": "^1.2.1"
+  "scripts": {
+    "start": "yarn workspace reason-graphql-hooks start",
+    "build": "yarn workspace reason-graphql-hooks build"
   },
-  "devDependencies": {
-    "bs-fetch": "^0.5.0",
-    "bs-platform": "^5.0.6",
-    "reason-react": "^0.7.0"
-  },
-  "peerDependencies": {
-    "bs-fetch": "^0.5.0",
-    "reason-react": "^0.7.0"
-  }
+  "workspaces": [
+    "examples/*",
+    "reason-graphql-hooks"
+  ]
 }
