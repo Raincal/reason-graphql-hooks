@@ -5,22 +5,28 @@ module type Config = {
 };
 
 [@bs.deriving abstract]
+type sourceLocation = {
+  line: int,
+  column: int,
+};
+
+type locations = array(sourceLocation);
+
+[@bs.deriving abstract]
 type operation = {
   query: string,
   variables: Js.Nullable.t(Js.Json.t),
   operationName: Js.Nullable.t(string),
 };
 
-type graphqlError = {
+type graphQLError = {
   .
+  "locations": locations,
+  "path": array(string),
+  "code": int,
   "message": string,
-  "name": Js.Nullable.t(string),
-  "locations": Js.Nullable.t(array(string)),
-  "path": Js.Nullable.t(array(string)),
-  "nodes": Js.Nullable.t(array(string)),
+  "requestId": string,
 };
-
-type graphqlErrors = array(graphqlError);
 
 type httpError = {
   .
@@ -29,12 +35,31 @@ type httpError = {
   "body": string,
 };
 
-type fetchError;
-
 type error =
-  | GraphQLErrors(graphqlErrors)
+  | GraphQLErrors(array(graphQLError))
   | HttpError(httpError)
-  | FetchError(fetchError);
+  | FetchError(Js.Exn.t);
+
+type combinedErrorJs = {
+  .
+  "fetchError": Js.Nullable.t(Js.Exn.t),
+  "graphQLErrors": Js.Nullable.t(array(graphQLError)),
+  "httpError": Js.Nullable.t(httpError),
+};
+
+type combinedError = {
+  fetchError: option(Js.Exn.t),
+  graphQLErrors: option(array(graphQLError)),
+  httpError: option(httpError),
+};
+
+let combinedErrorToRecord = (err: combinedErrorJs): combinedError => {
+  {
+    fetchError: err##fetchError->Js.Nullable.toOption,
+    graphQLErrors: err##graphQLErrors->Js.Nullable.toOption,
+    httpError: err##httpError->Js.Nullable.toOption,
+  };
+};
 
 type response('a) =
   | Data('a)
@@ -45,10 +70,7 @@ type response('a) =
 type result('a) = {
   data: option('a),
   loading: bool,
-  error: bool,
-  graphQLErrors: option(graphqlErrors),
-  httpError: option(httpError),
-  fetchError: option(fetchError),
+  error: option(combinedError),
 };
 
 type hooksResponse('a) = {

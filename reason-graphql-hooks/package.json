@@ -25,7 +25,7 @@
   "author": "Raincal <cyj94228@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "graphql-hooks": "^3.6.0",
+    "graphql-hooks": "^4.0.1",
     "graphql-hooks-memcache": "^1.2.1"
   },
   "devDependencies": {
