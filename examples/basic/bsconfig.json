@@ -11,8 +11,7 @@
     "bs-fetch"
   ],
   "ppx-flags": [
-    "graphql_ppx/ppx",
-    "js_deep_ppx/ppx"
+    "@baransu/graphql_ppx_re/ppx6"
   ],
   "sources": "src",
   "package-specs": {

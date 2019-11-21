@@ -5,11 +5,16 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "start": "yarn workspace reason-graphql-hooks start",
-    "build": "yarn workspace reason-graphql-hooks build"
+    "build": "yarn workspace reason-graphql-hooks build",
+    "clean": "yarn workspace reason-graphql-hooks clean"
   },
   "workspaces": [
     "examples/*",
     "reason-graphql-hooks"
-  ]
+  ],
+  "devDependencies": {
+    "lerna": "^3.19.0"
+  }
 }

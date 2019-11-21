@@ -6,7 +6,7 @@ let graphQLClient = null
 
 function create(initialState = {}) {
   return new GraphQLClient({
-    ssrMode: true,
+    ssrMode: typeof window === 'undefined',
     url: 'https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn',
     cache: memCache({ initialState }),
     fetch: typeof window !== 'undefined' ? fetch.bind() : unfetch, // eslint-disable-line

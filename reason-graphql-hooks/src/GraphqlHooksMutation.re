@@ -57,8 +57,6 @@ module Make = (Config: Config) => {
         | _ => NoData
         };
 
-      Js.log(response);
-
       {loading, data, cacheHit, response};
     };
 

@@ -30,11 +30,14 @@ let default = () => {
   let ({response, loading}, refetch) =
     AllPostsQuery.use(
       ~variables=AllPostsQueryConfig.make(~skip, ~first=10, ())##variables,
-      ~updateData=
-        (prevResult, result) => [%js.deep
-          result["allPosts"].replace(
-            Belt.Array.concat(prevResult##allPosts, result##allPosts),
-          )],
+      ~updateData=[%bs.raw
+        {|
+          (prevResult, result) => ({
+            ...result,
+            allPosts: [...prevResult.allPosts, ...result.allPosts],
+          })
+        |}
+      ],
       (),
     );
 
