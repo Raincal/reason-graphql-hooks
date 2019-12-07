@@ -1,4 +1,4 @@
-open GraphqlHooks.Types;
+open GraphqlHooksMutation;
 open Util;
 
 module CreatePostConfig = [%graphql

@@ -1,7 +1,7 @@
 %raw
 "require('../styles/main.css')";
 
-open GraphqlHooks.Types;
+open GraphqlHooksQuery;
 open Util.ReactStuff;
 
 module AllPostsQueryConfig = [%graphql
@@ -92,25 +92,24 @@ let default = () => {
               ? <button
                   className="bg-blue-400 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline text-sm"
                   onClick={_ => setSkip(_ => skip + 10)}>
-                  {
-                    loading ? "Loading..." : "Show More";
-                  }
-                  ->s
+                  {loading ? "Loading..." : "Show More"}->s
                 </button>
               : React.null}
          </section>
        </>;
      | Error(error) =>
-       switch (error) {
-       | GraphQLErrors(errors) =>
-         errors
-         |> Array.mapi((idx, error) =>
-              <p key={idx->string_of_int}> {error.message->s} </p>
-            )
-         |> ate
-       | HttpError(error) => <div> {error.body->s} </div>
-       | FetchError(_error) => <div> "fetch error"->s </div>
-       }
+       GraphqlHooksTypes.(
+         switch (error) {
+         | GraphQLErrors(errors) =>
+           errors
+           |> Array.mapi((idx, error) =>
+                <p key={idx->string_of_int}> error.message->s </p>
+              )
+           |> ate
+         | HttpError(error) => <div> error.body->s </div>
+         | FetchError(_error) => <div> "fetch error"->s </div>
+         }
+       )
      }}
   </MainLayout>;
 };

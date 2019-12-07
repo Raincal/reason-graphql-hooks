@@ -1,6 +1,12 @@
-open GraphqlHooksTypes;
+type hookResponse('ret) =
+  GraphqlHooksTypes.hooksResponse('ret) = {
+    loading: bool,
+    data: option('ret),
+    cacheHit: bool,
+    response: GraphqlHooksTypes.response('ret),
+  };
 
-module Make = (Config: Config) => {
+module Make = (Config: GraphqlHooksTypes.Config) => {
   [@bs.deriving abstract]
   type useQueryOptions = {
     [@bs.optional]
@@ -25,7 +31,7 @@ module Make = (Config: Config) => {
     loading: bool,
     cacheHit: bool,
     data: Js.Nullable.t(Js.Json.t),
-    error: option(combinedErrorJs),
+    error: option(GraphqlHooksTypes.combinedErrorJs),
     refetch: useQueryOptions => Js.Promise.t(useQueryResponseJs),
   };
 
@@ -63,12 +69,13 @@ module Make = (Config: Config) => {
     let useQueryResponseToRecord = (parse, state) => {
       let data = state.data->Js.Nullable.toOption->Belt.Option.map(parse);
       let loading = state.loading;
-      let error = state.error->Belt.Option.map(combinedErrorToRecord);
+      let error =
+        state.error->Belt.Option.map(GraphqlHooksTypes.combinedErrorToRecord);
       let cacheHit = state.cacheHit;
 
-      let result = {data, loading, error};
+      let result: GraphqlHooksTypes.result('a) = {data, loading, error};
 
-      let response =
+      let response: GraphqlHooksTypes.response(Config.t) =
         switch (result) {
         | {data: Some(data)} => Data(data)
         | {loading: true} => Loading
