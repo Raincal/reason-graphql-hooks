@@ -4,7 +4,6 @@ type lru;
 type cacheData;
 type options;
 
-[@bs.deriving abstract]
 type cacheKeyObject = {
   operation,
   fetchOptions: options,

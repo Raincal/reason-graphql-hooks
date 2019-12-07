@@ -90,10 +90,10 @@ let make = () => {
     | GraphQLErrors(errors) =>
       errors
       |> Array.mapi((idx, error) =>
-           <p key={idx->string_of_int}> {error##message->s} </p>
+           <p key={idx->string_of_int}> {error.message->s} </p>
          )
       |> ate
-    | HttpError(error) => <div> {error##body->s} </div>
+    | HttpError(error) => <div> {error.body->s} </div>
     | FetchError(_error) => <div> "fetch error"->s </div>
     }
   };

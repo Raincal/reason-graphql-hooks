@@ -4,7 +4,6 @@ module type Config = {
   let parse: Js.Json.t => t;
 };
 
-[@bs.deriving abstract]
 type sourceLocation = {
   line: int,
   column: int,
@@ -12,7 +11,6 @@ type sourceLocation = {
 
 type locations = array(sourceLocation);
 
-[@bs.deriving abstract]
 type operation = {
   query: string,
   variables: Js.Nullable.t(Js.Json.t),
@@ -20,19 +18,17 @@ type operation = {
 };
 
 type graphQLError = {
-  .
-  "locations": locations,
-  "path": array(string),
-  "code": int,
-  "message": string,
-  "requestId": string,
+  locations: locations,
+  path: array(string),
+  code: int,
+  message: string,
+  requestId: string,
 };
 
 type httpError = {
-  .
-  "status": int,
-  "statusText": string,
-  "body": string,
+  status: int,
+  statusText: string,
+  body: string,
 };
 
 type error =
@@ -41,10 +37,9 @@ type error =
   | FetchError(Js.Exn.t);
 
 type combinedErrorJs = {
-  .
-  "fetchError": Js.Nullable.t(Js.Exn.t),
-  "graphQLErrors": Js.Nullable.t(array(graphQLError)),
-  "httpError": Js.Nullable.t(httpError),
+  fetchError: Js.Nullable.t(Js.Exn.t),
+  graphQLErrors: Js.Nullable.t(array(graphQLError)),
+  httpError: Js.Nullable.t(httpError),
 };
 
 type combinedError = {
@@ -55,9 +50,9 @@ type combinedError = {
 
 let combinedErrorToRecord = (err: combinedErrorJs): combinedError => {
   {
-    fetchError: err##fetchError->Js.Nullable.toOption,
-    graphQLErrors: err##graphQLErrors->Js.Nullable.toOption,
-    httpError: err##httpError->Js.Nullable.toOption,
+    fetchError: err.fetchError->Js.Nullable.toOption,
+    graphQLErrors: err.graphQLErrors->Js.Nullable.toOption,
+    httpError: err.httpError->Js.Nullable.toOption,
   };
 };
 

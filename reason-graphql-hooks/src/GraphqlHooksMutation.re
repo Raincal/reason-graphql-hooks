@@ -11,7 +11,6 @@ module Make = (Config: Config) => {
     fetchOptionsOverrides: Fetch.requestInit,
   };
 
-  [@bs.deriving abstract]
   type useMutationResponseJs = {
     loading: bool,
     cacheHit: bool,
@@ -36,10 +35,10 @@ module Make = (Config: Config) => {
 
     let useMutationResponseToRecord =
         (parse: Js.Json.t => 'response, state: useMutationResponseJs) => {
-      let data = state->dataGet->Js.Nullable.toOption->Belt.Option.map(parse);
-      let loading = state->loadingGet;
-      let error = state->errorGet->Belt.Option.map(combinedErrorToRecord);
-      let cacheHit = state->cacheHitGet;
+      let data = state.data->Js.Nullable.toOption->Belt.Option.map(parse);
+      let loading = state.loading;
+      let error = state.error->Belt.Option.map(combinedErrorToRecord);
+      let cacheHit = state.cacheHit;
 
       let result = {data, loading, error};
 

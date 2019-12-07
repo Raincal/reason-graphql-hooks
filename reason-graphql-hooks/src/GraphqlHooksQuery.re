@@ -21,7 +21,6 @@ module Make = (Config: Config) => {
     updateData: (Config.t, Config.t) => Config.t,
   };
 
-  [@bs.deriving abstract]
   type useQueryResponseJs = {
     loading: bool,
     cacheHit: bool,
@@ -59,13 +58,13 @@ module Make = (Config: Config) => {
     let state = useQueryJs(Config.query, options);
 
     let refetch = (~variables=?, ()) =>
-      state->refetchGet(useQueryOptions(~variables?, ()));
+      state.refetch(useQueryOptions(~variables?, ()));
 
     let useQueryResponseToRecord = (parse, state) => {
-      let data = state->dataGet->Js.Nullable.toOption->Belt.Option.map(parse);
-      let loading = state->loadingGet;
-      let error = state->errorGet->Belt.Option.map(combinedErrorToRecord);
-      let cacheHit = state->cacheHitGet;
+      let data = state.data->Js.Nullable.toOption->Belt.Option.map(parse);
+      let loading = state.loading;
+      let error = state.error->Belt.Option.map(combinedErrorToRecord);
+      let cacheHit = state.cacheHit;
 
       let result = {data, loading, error};
 

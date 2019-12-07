@@ -1,4 +1,4 @@
-type t = {. "cache": GraphqlHooksMemcache.memCache};
+type t = {cache: GraphqlHooksMemcache.memCache};
 
 type fetch;
 
