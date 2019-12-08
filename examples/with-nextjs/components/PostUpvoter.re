@@ -22,13 +22,13 @@ let make = (~id: string, ~votes: int, ~onUpdate: unit => unit) => {
   let (_, updatePost) =
     UpdatePostMutation.use(
       ~variables=
-        UpdatePostConfig.make(
+        UpdatePostConfig.makeVariables(
           ~id,
           ~votes={
             votes + 1;
           },
           (),
-        )##variables,
+        ),
       (),
     );
 

@@ -24,7 +24,7 @@ module AllPostsQuery = GraphqlHooksQuery.Make(AllPostsQueryConfig);
 let make = () => {
   let (skip, setSkip) = React.useState(_ => 0);
 
-  let variables = AllPostsQueryConfig.make(~skip, ~first=10, ())##variables;
+  let variables = AllPostsQueryConfig.makeVariables(~skip, ~first=10, ());
 
   let ({response, loading}, refetch) =
     AllPostsQuery.use(
@@ -42,7 +42,7 @@ let make = () => {
 
   let handleUpdate = first =>
     refetch(
-      ~variables=AllPostsQueryConfig.make(~skip=0, ~first, ())##variables,
+      ~variables=AllPostsQueryConfig.makeVariables(~skip=0, ~first, ()),
       (),
     )
     |> ignore;

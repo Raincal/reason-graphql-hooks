@@ -17,13 +17,13 @@ module UpdatePostMutation = GraphqlHooksMutation.Make(UpdatePostConfig);
 [@react.component]
 let make = (~id: string, ~votes: int, ~onUpdate: unit => unit) => {
   let variables =
-    UpdatePostConfig.make(
+    UpdatePostConfig.makeVariables(
       ~id,
       ~votes={
         votes + 1;
       },
       (),
-    )##variables;
+    );
 
   let (_, updatePost) = UpdatePostMutation.use(~variables, ());
 

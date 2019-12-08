@@ -27,7 +27,7 @@ let make = (~onSubmission: unit => unit) => {
 
   let ({loading}, createPost) =
     CreatePostMutation.use(
-      ~variables=CreatePostConfig.make(~title, ~url, ())##variables,
+      ~variables=CreatePostConfig.makeVariables(~title, ~url, ()),
       (),
     );
 

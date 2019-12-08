@@ -29,7 +29,7 @@ let default = () => {
 
   let ({response, loading}, refetch) =
     AllPostsQuery.use(
-      ~variables=AllPostsQueryConfig.make(~skip, ~first=10, ())##variables,
+      ~variables=AllPostsQueryConfig.makeVariables(~skip, ~first=10, ()),
       ~updateData=[%bs.raw
         {|
           (prevResult, result) => ({
@@ -43,7 +43,7 @@ let default = () => {
 
   let handleUpdate = first =>
     refetch(
-      ~variables=AllPostsQueryConfig.make(~skip=0, ~first, ())##variables,
+      ~variables=AllPostsQueryConfig.makeVariables(~skip=0, ~first, ()),
       (),
     )
     |> ignore;

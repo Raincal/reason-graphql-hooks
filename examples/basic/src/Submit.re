@@ -22,7 +22,7 @@ let make = (~onSubmission: unit => unit) => {
   let (title, setTitle) = React.useState(_ => "");
   let (url, setUrl) = React.useState(_ => "");
 
-  let variables = CreatePostConfig.make(~title, ~url, ())##variables;
+  let variables = CreatePostConfig.makeVariables(~title, ~url, ());
 
   let ({loading}, createPost) = CreatePostMutation.use(~variables, ());
 
