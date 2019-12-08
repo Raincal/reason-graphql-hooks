@@ -1,7 +1,7 @@
 open GraphqlHooksMutation;
 open Util;
 
-module CreatePostConfig = [%graphql
+module CreatePost = [%graphql
   {|
     mutation createPost($title: String!, $url: String!) {
       createPost(title: $title, url: $url) {
@@ -15,16 +15,14 @@ module CreatePostConfig = [%graphql
   |}
 ];
 
-module CreatePostMutation = GraphqlHooksMutation.Make(CreatePostConfig);
-
 [@react.component]
 let make = (~onSubmission: unit => unit) => {
   let (title, setTitle) = React.useState(_ => "");
   let (url, setUrl) = React.useState(_ => "");
 
-  let variables = CreatePostConfig.makeVariables(~title, ~url, ());
+  let request = CreatePost.make(~title, ~url, ());
 
-  let ({loading}, createPost) = CreatePostMutation.use(~variables, ());
+  let ({loading}, createPost) = useMutation(~request, ());
 
   let reset = () => {
     setTitle(_ => "");

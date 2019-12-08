@@ -18,7 +18,7 @@ type operation = {
 };
 
 type graphQLError = {
-  locations: locations,
+  locations,
   path: array(string),
   code: int,
   message: string,
@@ -74,3 +74,14 @@ type hooksResponse('a) = {
   cacheHit: bool,
   response: response('a),
 };
+
+type parse('a) = Js.Json.t => 'a;
+type query = string;
+type composeVariables('returnType, 'hookReturnType) =
+  (Js.Json.t => 'returnType) => 'hookReturnType;
+
+type graphqlDefinition('data, 'returnType, 'hookReturnType) = (
+  parse('data),
+  query,
+  composeVariables('returnType, 'hookReturnType),
+);

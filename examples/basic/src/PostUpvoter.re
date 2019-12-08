@@ -1,3 +1,4 @@
+open GraphqlHooksMutation;
 open Util;
 
 module UpdatePostConfig = [%graphql
@@ -12,12 +13,10 @@ module UpdatePostConfig = [%graphql
   |}
 ];
 
-module UpdatePostMutation = GraphqlHooksMutation.Make(UpdatePostConfig);
-
 [@react.component]
 let make = (~id: string, ~votes: int, ~onUpdate: unit => unit) => {
-  let variables =
-    UpdatePostConfig.makeVariables(
+  let request =
+    UpdatePostConfig.make(
       ~id,
       ~votes={
         votes + 1;
@@ -25,7 +24,7 @@ let make = (~id: string, ~votes: int, ~onUpdate: unit => unit) => {
       (),
     );
 
-  let (_, updatePost) = UpdatePostMutation.use(~variables, ());
+  let (_, updatePost) = useMutation(~request, ());
 
   <button
     onClick={_ =>

@@ -4,7 +4,7 @@
 open GraphqlHooksQuery;
 open Util.ReactStuff;
 
-module AllPostsQueryConfig = [%graphql
+module AllPostsQuery = [%graphql
   {|
     query allPosts($first: Int!, $skip: Int!) {
       allPosts(orderBy: createdAt_DESC, first: $first, skip: $skip) {
@@ -21,15 +21,13 @@ module AllPostsQueryConfig = [%graphql
   |}
 ];
 
-module AllPostsQuery = GraphqlHooksQuery.Make(AllPostsQueryConfig);
-
 [@react.component]
 let default = () => {
   let (skip, setSkip) = React.useState(_ => 0);
 
   let ({response, loading}, refetch) =
-    AllPostsQuery.use(
-      ~variables=AllPostsQueryConfig.makeVariables(~skip, ~first=10, ()),
+    useQuery(
+      ~variables=AllPostsQuery.makeVariables(~skip, ~first=10, ()),
       ~updateData=[%bs.raw
         {|
           (prevResult, result) => ({
@@ -38,14 +36,11 @@ let default = () => {
           })
         |}
       ],
-      (),
+      AllPostsQuery.definition,
     );
 
   let handleUpdate = first =>
-    refetch(
-      ~variables=AllPostsQueryConfig.makeVariables(~skip=0, ~first, ()),
-      (),
-    )
+    refetch(~variables=AllPostsQuery.makeVariables(~skip=0, ~first, ()), ())
     |> ignore;
 
   <MainLayout>

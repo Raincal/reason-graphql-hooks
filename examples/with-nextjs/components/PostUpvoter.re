@@ -1,9 +1,10 @@
 %raw
 "require('../styles/main.css')";
 
+open GraphqlHooksMutation;
 open Util.ReactStuff;
 
-module UpdatePostConfig = [%graphql
+module UpdatePost = [%graphql
   {|
     mutation updatePost($id: ID!, $votes: Int) {
       updatePost(id: $id, votes: $votes) {
@@ -15,14 +16,12 @@ module UpdatePostConfig = [%graphql
   |}
 ];
 
-module UpdatePostMutation = GraphqlHooksMutation.Make(UpdatePostConfig);
-
 [@react.component]
 let make = (~id: string, ~votes: int, ~onUpdate: unit => unit) => {
   let (_, updatePost) =
-    UpdatePostMutation.use(
-      ~variables=
-        UpdatePostConfig.makeVariables(
+    useMutation(
+      ~request=
+        UpdatePost.make(
           ~id,
           ~votes={
             votes + 1;

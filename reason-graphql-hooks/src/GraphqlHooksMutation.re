@@ -1,4 +1,4 @@
-type hookResponse('ret) =
+type hooksResponse('ret) =
   GraphqlHooksTypes.hooksResponse('ret) = {
     loading: bool,
     data: option('ret),
@@ -6,84 +6,78 @@ type hookResponse('ret) =
     response: GraphqlHooksTypes.response('ret),
   };
 
-module Make = (Config: GraphqlHooksTypes.Config) => {
-  [@bs.deriving abstract]
-  type useMutationOptions = {
-    [@bs.optional]
-    variables: Js.Json.t,
-    [@bs.optional]
-    operationName: string,
-    [@bs.optional]
-    fetchOptionsOverrides: Fetch.requestInit,
-  };
+[@bs.deriving abstract]
+type useMutationOptions = {
+  [@bs.optional]
+  variables: Js.Json.t,
+  [@bs.optional]
+  operationName: string,
+  [@bs.optional]
+  fetchOptionsOverrides: Fetch.requestInit,
+};
 
-  type useMutationResponseJs = {
-    loading: bool,
-    cacheHit: bool,
-    data: Js.Nullable.t(Js.Json.t),
-    error: option(GraphqlHooksTypes.combinedErrorJs),
-  };
+type useMutationResponseJs = {
+  .
+  "loading": bool,
+  "cacheHit": bool,
+  "data": Js.Nullable.t(Js.Json.t),
+  "error": option(GraphqlHooksTypes.combinedErrorJs),
+};
 
-  type executeMutation =
-    useMutationOptions => Js.Promise.t(useMutationResponseJs);
+type executeMutation =
+  useMutationOptions => Js.Promise.t(useMutationResponseJs);
 
-  [@bs.module "graphql-hooks"]
-  external useMutation:
-    (string, useMutationOptions) => (executeMutation, useMutationResponseJs) =
-    "useMutation";
+[@bs.module "graphql-hooks"]
+external useMutationJs:
+  (string, useMutationOptions) => (executeMutation, useMutationResponseJs) =
+  "useMutation";
 
-  let use = (~variables=?, ~operationName=?, ()) => {
-    let (executeMutation, useMutationResponseJs) =
-      useMutation(
-        Config.query,
-        useMutationOptions(~variables?, ~operationName?, ()),
-      );
+let useMutation = (~request, ~operationName=?, ()) => {
+  let (executeMutation, useMutationResponseJs) =
+    useMutationJs(
+      request##query,
+      useMutationOptions(~variables=request##variables, ~operationName?, ()),
+    );
 
-    let useMutationResponseToRecord =
-        (parse: Js.Json.t => 'response, state: useMutationResponseJs) => {
-      let data = state.data->Js.Nullable.toOption->Belt.Option.map(parse);
-      let loading = state.loading;
-      let error =
-        state.error->Belt.Option.map(GraphqlHooksTypes.combinedErrorToRecord);
-      let cacheHit = state.cacheHit;
+  let useMutationResponseToReason = (parse, state) => {
+    let data = state##data->Js.Nullable.toOption->Belt.Option.map(parse);
+    let loading = state##loading;
+    let error =
+      state##error->Belt.Option.map(GraphqlHooksTypes.combinedErrorToRecord);
+    let cacheHit = state##cacheHit;
 
-      let result: GraphqlHooksTypes.result(Config.t) = {
-        data,
-        loading,
-        error,
+    let result: GraphqlHooksTypes.result('data) = {data, loading, error};
+
+    let response: GraphqlHooksTypes.response('data) =
+      switch (result) {
+      | {loading: true} => Loading
+      | {error: Some(error)} =>
+        switch (error) {
+        | {graphQLErrors: Some(errors)} => Error(GraphQLErrors(errors))
+        | {httpError: Some(error)} => Error(HttpError(error))
+        | {fetchError: Some(error)} => Error(FetchError(error))
+        | _ => NoData
+        }
+      | {data: Some(data)} => Data(data)
+      | _ => NoData
       };
 
-      let response: GraphqlHooksTypes.response(Config.t) =
-        switch (result) {
-        | {loading: true} => Loading
-        | {error: Some(error)} =>
-          switch (error) {
-          | {graphQLErrors: Some(errors)} => Error(GraphQLErrors(errors))
-          | {httpError: Some(error)} => Error(HttpError(error))
-          | {fetchError: Some(error)} => Error(FetchError(error))
-          | _ => NoData
-          }
-        | {data: Some(data)} => Data(data)
-        | _ => NoData
-        };
-
-      {loading, data, cacheHit, response};
-    };
-
-    let useMutationResponse =
-      React.useMemo2(
-        () =>
-          useMutationResponseJs |> useMutationResponseToRecord(Config.parse),
-        (Config.parse, useMutationResponseJs),
-      );
-
-    let executeMutation =
-      React.useMemo1(
-        ((), ~variables=?, ()) =>
-          executeMutation(useMutationOptions(~variables?, ())),
-        [|variables|],
-      );
-
-    (useMutationResponse, executeMutation);
+    {loading, data, cacheHit, response};
   };
+
+  let useMutationResponse =
+    React.useMemo2(
+      () =>
+        useMutationResponseJs |> useMutationResponseToReason(request##parse),
+      (request##parse, useMutationResponseJs),
+    );
+
+  let executeMutation =
+    React.useMemo1(
+      ((), ~variables=?, ()) =>
+        executeMutation(useMutationOptions(~variables?, ())),
+      [|request##variables|],
+    );
+
+  (useMutationResponse, executeMutation);
 };

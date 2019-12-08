@@ -1,10 +1,10 @@
 %raw
 "require('../styles/main.css')";
 
-open GraphqlHooks.Types;
+open GraphqlHooksMutation;
 open Util.ReactStuff;
 
-module CreatePostConfig = [%graphql
+module CreatePost = [%graphql
   {|
     mutation createPost($title: String!, $url: String!) {
       createPost(title: $title, url: $url) {
@@ -18,18 +18,13 @@ module CreatePostConfig = [%graphql
   |}
 ];
 
-module CreatePostMutation = GraphqlHooksMutation.Make(CreatePostConfig);
-
 [@react.component]
 let make = (~onSubmission: unit => unit) => {
   let (title, setTitle) = React.useState(_ => "");
   let (url, setUrl) = React.useState(_ => "");
 
   let ({loading}, createPost) =
-    CreatePostMutation.use(
-      ~variables=CreatePostConfig.makeVariables(~title, ~url, ()),
-      (),
-    );
+    useMutation(~request=CreatePost.make(~title, ~url, ()), ());
 
   let reset = () => {
     setTitle(_ => "");
